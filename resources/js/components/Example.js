@@ -1,6 +1,7 @@
 import React, { Component} from 'react'
 import ReactDOM from 'react-dom'
 import TransferForm from './TransferForm'
+import TransferList from './TransferList'
 
 export default class Example extends Component{
     render(){
@@ -17,14 +18,7 @@ export default class Example extends Component{
                 </div>
 
     			<div className="m-t-md">
-    				<table className="table">
-    					<tbody>
-    						<tr>
-    							<td>Ejemplo</td>
-    							<td>1200</td>
-    						</tr>
-    					</tbody>
-    				</table>
+                    <TransferList />
     			</div>
 
             </div>
