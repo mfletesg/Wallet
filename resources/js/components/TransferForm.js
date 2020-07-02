@@ -1,7 +1,7 @@
 import React from 'react'
 
-const TransferForm = ({form, onChange}) => (
-    <form className="form-inline justify-content-center">
+const TransferForm = ({form, onChange, onSubmit}) => (
+    <form className="form-inline justify-content-center" onSubmit={onSubmit}>
         <div className="form-group mb-2">
             <input type="text" className="form-control" placeholder="Description" name="description" value={form.description} onChange={onChange}/>
         </div>

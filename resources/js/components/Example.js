@@ -2,6 +2,7 @@ import React, { Component} from 'react'
 import ReactDOM from 'react-dom'
 import TransferForm from './TransferForm'
 import TransferList from './TransferList'
+import url from '../url'
 
 export default class Example extends Component{
     constructor(props){
@@ -18,6 +19,37 @@ export default class Example extends Component{
             }
         }
         this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    async handleSubmit(e){
+        e.preventDefault()
+        //console.log('Sending..');
+        try {
+            let config ={
+                method: 'POST',
+                headers:{
+                    'Accept' : 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form) // Agregamos la informacion que se va a enviar
+            }
+
+            let res = await fetch(url + '/api/transfer', config)
+            let data = await res.json()
+
+            this.setState({
+                transfers: this.state.transfers.concat(data), //Añadimos la infomacion al array de transfers
+                money: this.state.money + (parseInt(data.amount))
+            })
+
+        } catch (error) {
+            this.setState({
+                error
+            })
+        } finally {
+
+        }
     }
 
     handleChange(e){
@@ -32,7 +64,7 @@ export default class Example extends Component{
 
     async componentDidMount(){
         try {
-            let res = await fetch('http://127.0.0.1:8000/api/wallet')
+            let res = await fetch(url + '/api/wallet')
             let data = await res.json()
 
             this.setState({ //Guardamos lo que recibimos en la variables de estado
@@ -51,20 +83,17 @@ export default class Example extends Component{
     render(){
         return (
             <div className="container">
-
                 <div className="row justify-content-center">
                     <div className="col-md-12 m-t-md">
                         <p className="title">$ {this.state.money}</p>
                     </div>
     				<div className="col-md-12">
-                        <TransferForm form={this.state.form} onChange={this.handleChange}/>
+                        <TransferForm form={this.state.form} onChange={this.handleChange} onSubmit={this.handleSubmit}/>
     				</div>
                 </div>
-
     			<div className="m-t-md">
                     <TransferList transfers={this.state.transfers}/>
     			</div>
-
             </div>
         );
     }
